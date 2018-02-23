@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 
 class PodcastListItem extends Component {
     render() {
@@ -49,14 +49,16 @@ class PodcastListItem extends Component {
         };
 
         return (
-            <View style={containerStyles}>
-                <View style={textContainer}>
-                    <Text style={titleStyle}>{title}</Text>
-                    <Text style={authorStyle}>{author}</Text>
-                    {renderFooter()}
+            <TouchableWithoutFeedback onPress={this.props.onItemPress}>
+                <View style={containerStyles}>
+                    <View style={textContainer}>
+                        <Text style={titleStyle}>{title}</Text>
+                        <Text style={authorStyle}>{author}</Text>
+                        {renderFooter()}
+                    </View>
+                    <Image style={imageStyle} source={require('../images/chevron-right.png')} />
                 </View>
-                <Image style={imageStyle} source={require('../images/chevron-right.png')} />
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

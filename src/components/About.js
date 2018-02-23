@@ -104,6 +104,7 @@ class About extends Component {
                         </TouchableOpacity>
                     </View>
                     <Text style={normalTextStyle}>data provided by radiomayak.ru</Text>
+                    <Text style={normalTextStyle}>Main icon made by Yannick from www.flaticon.com</Text>
                 </View>
             </View>
         );

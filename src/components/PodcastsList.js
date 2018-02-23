@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, FlatList, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import { podcastsListFetch } from '../actions';
 import { Spinner } from './common';
 import PodcastListItem from './PodcastListItem';
@@ -28,6 +29,7 @@ class PodcastsList extends Component {
             <PodcastListItem
                 item={item}
                 isDone={isDone}
+                onItemPress={() => Actions.player({ item })}
             />
         );
     }

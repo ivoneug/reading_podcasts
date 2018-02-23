@@ -7,6 +7,7 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import NavigationTitle from './components/common/NavigationTitle';
 import PodcastsList from './components/PodcastsList';
+import Player from './components/Player';
 import About from './components/About';
 
 class RouterComponent extends Component {
@@ -37,6 +38,17 @@ class RouterComponent extends Component {
 
                         key='list'
                         component={PodcastsList}
+                    />
+                    <Scene
+                        title='Now Listening'
+                        titleStyle={{ color: 'black', alignSelf: 'center' }}
+
+                        backTitle='Back'
+                        backButtonTextStyle={{ color: 'black' }}
+                        backButtonTintColor='black'
+
+                        key='player'
+                        component={Player}
                     />
                     <Scene
                         title='About'

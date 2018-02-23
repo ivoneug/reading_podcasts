@@ -30,13 +30,15 @@ const success = (dispatch, data) => {
             const title = item.title[0]
                             .substring(idx)
                             .replace(new RegExp('[- ]+$'), '')
+                            .replace(new RegExp('["]', 'g'), '')
                             .toUpperCase();
             const author = item.title[0]
                             .substring(0, idx)
                             .replace(new RegExp('[- ]+$'), '')
                             .toUpperCase();
 
-            const description = item['itunes:summary'] ? item['itunes:summary'][0] : '';
+            let description = item['itunes:summary'] ? item['itunes:summary'][0] : '';
+            description = description.replace(new RegExp('(?:\r\n|\r|\n)', 'g'), ' ');
 
             const entry = {
                 id: item.guid[0]._,
