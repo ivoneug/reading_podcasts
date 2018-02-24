@@ -1,9 +1,13 @@
-import React, { Component, Dimensions } from 'react';
-import { View, Text, Image, Slider } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, Image, Slider, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { AudioController } from 'react-native-hue-player';
+import * as Animatable from 'react-native-animatable';
+import { podcastPlayCompleted } from '../actions';
 
 class Player extends Component {
+    state = { showPlayButton: false };
+
     componentWillMount() {
         const audio = {
             key: this.props.item.id,
@@ -25,7 +29,27 @@ class Player extends Component {
     }
 
     onChangeStatus(status) {
-        console.log(status);
+        switch (status) {
+            case AudioController.status.PLAYING:
+                this.setState({ showPlayButton: false });
+                break;
+
+            case AudioController.status.PAUSED:
+            case AudioController.status.STOPPED:
+                this.setState({ showPlayButton: true });
+                break;
+
+            default:
+
+        }
+    }
+
+    onPlayerButtonPress() {
+        if (this.state.showPlayButton) {
+            AudioController.play();
+        } else {
+            AudioController.pause();
+        }
     }
 
     onPlayerValueChange() {
@@ -33,8 +57,6 @@ class Player extends Component {
     }
 
     onPlayerValueChangeComplete(value) {
-        console.log(`VALUE = ${value}`);
-
         let currentTime = value / 100.0;
         currentTime *= AudioController.currentAudio.duration;
 
@@ -43,7 +65,7 @@ class Player extends Component {
     }
 
     updateCurrentTime(currentTime) {
-        console.log(currentTime);
+        // console.log(currentTime);
 
         let sliderValue = currentTime * 100.0;
         sliderValue /= AudioController.currentAudio.duration;
@@ -51,6 +73,50 @@ class Player extends Component {
         if (this.slider && !this.shouldNotUpdateSlider) {
             this.slider.setNativeProps({ value: sliderValue });
         }
+
+        if (sliderValue > 95) {
+            // mark podcast as completed
+            this.props.podcastPlayCompleted(this.props.item.id);
+        }
+    }
+
+    renderPlayer() {
+        const {
+            playerContainerStyle,
+            seekbarStyle,
+            buttonStyle
+        } = playerStyles;
+
+        const playImage = require('../images/play.png');
+        const pauseImage = require('../images/pause.png');
+        const buttonImage = this.state.showPlayButton ? playImage : pauseImage;
+
+        return (
+            <Animatable.View
+                animation='fadeIn'
+                delay={400}
+                style={playerContainerStyle}
+            >
+                <Slider
+                    ref={slider => { this.slider = slider; }}
+                    style={seekbarStyle}
+                    step={1}
+                    minimumValue={0}
+                    maximumValue={100}
+                    minimumTrackTintColor='#C9E3FF'
+                    onValueChange={this.onPlayerValueChange.bind(this)}
+                    onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
+                />
+                <TouchableOpacity
+                    onPress={this.onPlayerButtonPress.bind(this)}
+                >
+                    <Image
+                        style={buttonStyle}
+                        source={buttonImage}
+                    />
+                </TouchableOpacity>
+            </Animatable.View>
+        );
     }
 
     render() {
@@ -69,52 +135,58 @@ class Player extends Component {
             footerTextStyle,
             topContainerStyle,
             middleContainerStyle,
-            bottomContainerStyle,
             footerContainerStyle
         } = styles;
-        const {
-            seekbarStyle
-        } = playerStyles;
 
         const durationText = `duration: ${duration}`;
         const releaseDateText = `release date: ${(new Date(date)).toLocaleDateString()}`;
 
         return (
             <View style={containerStyle}>
-                <View style={topContainerStyle}>
+                <Animatable.View
+                    animation='fadeIn'
+                    delay={200}
+                    style={topContainerStyle}
+                >
                     <Text style={titleStyle}>{title}</Text>
                     <Text style={authorStyle}>{author}</Text>
-                </View>
+                </Animatable.View>
 
-                <View style={middleContainerStyle}>
+                <Animatable.View
+                    animation='fadeIn'
+                    delay={300}
+                    style={middleContainerStyle}
+                >
                     <Text style={descriptionStyle}>{description}</Text>
-                </View>
+                </Animatable.View>
 
-                <View style={bottomContainerStyle}>
-                    <Slider
-                        ref={slider => { this.slider = slider; }}
-                        style={seekbarStyle}
-                        step={1}
-                        minimumValue={0}
-                        maximumValue={100}
-                        minimumTrackTintColor='#C9E3FF'
-                        onValueChange={this.onPlayerValueChange.bind(this)}
-                        onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
-                    />
-                </View>
+                {this.renderPlayer()}
 
-                <View style={footerContainerStyle}>
+                <Animatable.View
+                    animation='fadeIn'
+                    delay={500}
+                    style={footerContainerStyle}
+                >
                     <Text style={footerTextStyle}>{releaseDateText}</Text>
                     <Text style={footerTextStyle}>{durationText}</Text>
-                </View>
+                </Animatable.View>
             </View>
         );
     }
 }
 
 const playerStyles = {
+    playerContainerStyle: {
+        flex: 1.5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     seekbarStyle: {
         width: 300
+    },
+    buttonStyle: {
+        width: 85,
+        height: 85
     }
 };
 
@@ -133,11 +205,6 @@ const styles = {
     middleContainerStyle: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    bottomContainerStyle: {
-        flex: 2,
-        alignItems: 'stretch',
         justifyContent: 'center'
     },
     footerContainerStyle: {
@@ -165,4 +232,4 @@ const styles = {
     }
 };
 
-export default connect()(Player);
+export default connect(null, { podcastPlayCompleted })(Player);

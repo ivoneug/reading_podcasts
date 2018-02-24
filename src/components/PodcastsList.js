@@ -12,19 +12,12 @@ class PodcastsList extends Component {
         this.props.podcastsListFetch();
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-        // this.dataSource = nextProps.articles;
-        // this.initDataSource(nextProps);
-    }
-
     componentWillUpdate() {
         LayoutAnimation.easeInEaseOut();
     }
 
     renderItem({ item }) {
-        const isDone =['https://player.vgtrk.com/audio/mp3/test/567/031.mp3']
-            .indexOf(item.id) !== -1;
+        const isDone = this.props.completed.indexOf(item.id) !== -1;
 
         return (
             <PodcastListItem
@@ -47,8 +40,11 @@ class PodcastsList extends Component {
     }
 
     render() {
-        console.log(this.props);
-        const { loaded, podcasts } = this.props;
+        const {
+            loaded,
+            podcasts,
+            completed
+        } = this.props;
         const { containerStyle } = styles;
 
         if (!loaded) {
@@ -65,7 +61,8 @@ class PodcastsList extends Component {
                 <FlatList
                     style={containerStyle}
                     data={podcasts}
-                    renderItem={this.renderItem}
+                    extraData={completed}
+                    renderItem={this.renderItem.bind(this)}
                     keyExtractor={(item) => item.id}
                 />
                 {this.renderAbout()}
@@ -86,7 +83,8 @@ const styles = {
 const mapStateToProps = (state) => {
     return {
         loaded: state.podcasts.length > 0,
-        podcasts: state.podcasts
+        podcasts: state.podcasts,
+        completed: state.completed
     };
 };
 

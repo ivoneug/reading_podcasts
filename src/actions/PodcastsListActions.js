@@ -23,8 +23,6 @@ export const podcastsListFetch = () => {
 
 const success = (dispatch, data) => {
     xml2js.parseString(data, (error, result) => {
-        console.log(result);
-
         const podcasts = result.rss.channel[0].item.map((item) => {
             const idx = item.title[0].indexOf('"');
             const title = item.title[0]
