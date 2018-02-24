@@ -7,6 +7,7 @@ import {
     Linking
 } from 'react-native';
 import Modal from 'react-native-modal';
+import * as Animatable from 'react-native-animatable';
 import { openAppPageInStore } from '../AppStoreInteraction';
 
 const Links = {
@@ -46,11 +47,16 @@ class About extends Component {
             >
                 <View style={containerStyle}>
                     <View style={mainContainerStyle}>
-                        <View style={headerStyle}>
+                        <Animatable.View
+                            // animation='fadeInUp'
+                            animation='bounceIn'
+                            delay={400}
+                            style={headerStyle}
+                        >
                             <Image source={require('../images/sunglasses-black.png')} />
                             <Text style={headerTextStyle}>Reading</Text>
-                        </View>
-                        <View>
+                        </Animatable.View>
+                        <Animatable.View animation='fadeIn' delay={900}>
                             <View style={developerContainerStyle}>
                                 <Text style={normalTextStyle}>developed by Evgeniy Ivon</Text>
                                 <View style={socialButtonsContainer}>
@@ -99,10 +105,14 @@ class About extends Component {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        </View>
+                        </Animatable.View>
                     </View>
 
-                    <View style={footerContainerStyle}>
+                    <Animatable.View
+                        animation='fadeIn'
+                        delay={1000}
+                        style={footerContainerStyle}
+                    >
                         <View style={rateShareContainer}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -118,21 +128,21 @@ class About extends Component {
                         <Text style={normalTextStyle}>data provided by radiomayak.ru</Text>
                         <Text style={normalTextStyle}>Main icon made by Yannick</Text>
                         <Text style={normalTextStyle}>from www.flaticon.com</Text>
-                    </View>
-                    <TouchableOpacity
+                    </Animatable.View>
+                    <Animatable.View
+                        animation='bounceIn'
+                        delay={1500}
                         style={backButtonStyle}
-                        onPress={() => {
-                            // this.backgroundView.fadeOut(800);
-                            if (onBackPress) {
-                                setTimeout(onBackPress, 300);
-                            }
-                        }}
                     >
-                        <Image
-                            style={backButtonImageStyle}
-                            source={require('../images/arrow-left.png')}
-                        />
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={onBackPress}
+                        >
+                            <Image
+                                style={backButtonImageStyle}
+                                source={require('../images/arrow-left.png')}
+                            />
+                        </TouchableOpacity>
+                    </Animatable.View>
                 </View>
             </Modal>
         );
