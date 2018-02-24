@@ -33,9 +33,7 @@ class PodcastListItem extends Component {
             if (this.props.isDone) {
                 return (
                     <View style={footerContainer}>
-                        <Text style={textStyle}>{durationText}</Text>
-                        <Text style={textStyle}>{releaseDateText}</Text>
-                        <Text style={doneTextStyle}>DONE</Text>
+                        <Text style={doneTextStyle}>COMPLETED</Text>
                     </View>
                 );
             }
@@ -98,7 +96,7 @@ const styles = {
     footerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 5
+        marginTop: 10
     },
     imageStyle: {
         margin: 15
