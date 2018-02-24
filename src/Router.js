@@ -34,7 +34,7 @@ class RouterComponent extends Component {
 
                         rightTitle='About'
                         rightButtonTextStyle={{ color: 'black' }}
-                        onRight={() => Actions.about()}
+                        onRight={() => Actions.refresh({ showAbout: true })}
 
                         key='list'
                         component={PodcastsList}
@@ -49,17 +49,6 @@ class RouterComponent extends Component {
 
                         key='player'
                         component={Player}
-                    />
-                    <Scene
-                        title='About'
-                        titleStyle={{ color: 'black', alignSelf: 'center' }}
-
-                        backTitle='Back'
-                        backButtonTextStyle={{ color: 'black' }}
-                        backButtonTintColor='black'
-
-                        key='about'
-                        component={About}
                     />
                 </Scene>
             </Router>

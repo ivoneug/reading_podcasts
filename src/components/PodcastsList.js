@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import { podcastsListFetch } from '../actions';
 import { Spinner } from './common';
 import PodcastListItem from './PodcastListItem';
+import About from './About';
 
 class PodcastsList extends Component {
     componentDidMount() {
@@ -34,6 +35,17 @@ class PodcastsList extends Component {
         );
     }
 
+    renderAbout() {
+        return (
+            <About
+                visible={this.props.showAbout}
+                onBackPress={() => {
+                    Actions.refresh({ showAbout: false });
+                }}
+            />
+        );
+    }
+
     render() {
         console.log(this.props);
         const { loaded, podcasts } = this.props;
@@ -43,17 +55,21 @@ class PodcastsList extends Component {
             return (
                 <View style={containerStyle}>
                     <Spinner />
+                    {this.renderAbout()}
                 </View>
             );
         }
 
         return (
-            <FlatList
-                style={containerStyle}
-                data={podcasts}
-                renderItem={this.renderItem}
-                keyExtractor={(item) => item.id}
-            />
+            <View style={containerStyle}>
+                <FlatList
+                    style={containerStyle}
+                    data={podcasts}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item) => item.id}
+                />
+                {this.renderAbout()}
+            </View>
         );
     }
 }
