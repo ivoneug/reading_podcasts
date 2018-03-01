@@ -105,6 +105,7 @@ class Player extends Component {
                     minimumValue={0}
                     maximumValue={100}
                     minimumTrackTintColor='#C9E3FF'
+                    thumbTintColor='#C9E3FF'
                     onValueChange={this.onPlayerValueChange.bind(this)}
                     onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
                 />
