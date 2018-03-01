@@ -25,6 +25,7 @@ class Spinner extends Component {
         return (
             <Animatable.View
                 animation='fadeIn'
+                useNativeDriver
                 style={style}
                 ref={(view) => { this.view = view; }}
             >
