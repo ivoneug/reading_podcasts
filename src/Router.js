@@ -46,6 +46,10 @@ class RouterComponent extends Component {
                         backButtonTextStyle={{ color: 'black' }}
                         backButtonTintColor='black'
 
+                        rightTitle=' '
+                        rightButtonTextStyle={{ color: 'black', paddingLeft: 5 }}
+                        onRight={() => {}}
+
                         key='player'
                         component={Player}
                     />
