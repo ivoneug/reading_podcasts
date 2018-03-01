@@ -3,6 +3,7 @@ package ru.bibobo.reading_podcasts;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
 import com.tanguyantoine.react.MusicControl;
 import com.zmxv.RNSound.RNSoundPackage;
 import fm.indiecast.rnaudiostreamer.RNAudioStreamerPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeLocalizationPackage(),
             new MusicControl(),
             new RNSoundPackage(),
             new RNAudioStreamerPackage(),
