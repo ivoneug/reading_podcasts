@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import axios from 'axios';
 import xml2js from 'react-native-xml2js';
 import {
@@ -7,7 +8,10 @@ import {
 
 export const podcastsListFetch = () => {
     return (dispatch) => {
-        axios.get('https://radiomayak.ru/podcasts/rss/podcast/703/type/audio/')
+        const urlScheme = Platform.OS === 'android' ? 'http://' : 'https://';
+        const url = `${urlScheme}radiomayak.ru/podcasts/rss/podcast/703/type/audio/`;
+
+        axios.get(url)
             .then((response) => {
                 if (response && response.data) {
                     success(dispatch, response.data);
@@ -15,7 +19,7 @@ export const podcastsListFetch = () => {
                     failed(dispatch);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
                 failed(dispatch);
             });
     };
