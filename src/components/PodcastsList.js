@@ -68,7 +68,10 @@ class PodcastsList extends Component {
                     />
                 </Animatable.View>
                 {this.renderAbout()}
-                <Spinner visible={!loaded} />
+                <Spinner
+                    visible={!loaded}
+                    color='#C9E3FF'
+                />
             </View>
         );
     }

@@ -17,7 +17,7 @@ class Spinner extends Component {
 
     render() {
         const { visible } = this.state;
-        const { size } = this.props;
+        const { size, color } = this.props;
         const { spinnerStyle, hideStyle } = styles;
 
         const style = visible ? spinnerStyle : [spinnerStyle, hideStyle];
@@ -29,7 +29,10 @@ class Spinner extends Component {
                 style={style}
                 ref={(view) => { this.view = view; }}
             >
-                {visible ? <ActivityIndicator size={size || 'large'} /> : null}
+                {visible ? <ActivityIndicator
+                    size={size || 'large'}
+                    color={color}
+                /> : null}
             </Animatable.View>
         );
     }
