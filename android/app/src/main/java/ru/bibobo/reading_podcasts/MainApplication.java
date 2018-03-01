@@ -1,4 +1,4 @@
-package com.reading_podcasts;
+package ru.bibobo.reading_podcasts;
 
 import android.app.Application;
 
