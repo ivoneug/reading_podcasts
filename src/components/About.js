@@ -4,9 +4,10 @@ import {
     Text,
     Image,
     TouchableOpacity,
-    Linking
+    Linking,
+    Modal,
+    Dimensions
 } from 'react-native';
-import Modal from 'react-native-modal';
 import * as Animatable from 'react-native-animatable';
 import { openAppPageInStore } from '../AppStoreInteraction';
 
@@ -18,9 +19,30 @@ const Links = {
     LINKEDIN_VIKTOR: 'https://www.linkedin.com/in/viktor-savelev-66a5b2114/'
 };
 
+const { width, height } = Dimensions.get('window');
+Animatable.initializeRegistryWithDefinitions({
+    slideInUpCustom: {
+        from: {
+            translateY: height
+        },
+        to: {
+            translateY: 0
+        }
+    },
+    slideOutDownCustom: {
+        from: {
+            translateY: 0
+        },
+        to: {
+            translateY: height
+        }
+    }
+});
+
 class About extends Component {
     render() {
         const {
+            backgroundStyle,
             containerStyle,
             mainContainerStyle,
             headerStyle,
@@ -41,16 +63,38 @@ class About extends Component {
         let { visible } = this.props;
         visible = visible || false;
 
+        const onBackPressAction = () => {
+            this.backgroundView.fadeOut(300);
+            this.contentView.slideOutDownCustom(300)
+                .then(onBackPress);
+        };
+
         return (
             <Modal
-                isVisible={visible}
+                transparent
+                animationType={'none'}
+                visible={visible}
+                onRequestClose={() => {}}
             >
-                <View style={containerStyle}>
+                <Animatable.View
+                    animation='fadeIn'
+                    duration={300}
+                    useNativeDriver
+                    style={backgroundStyle}
+                    ref={(view) => { this.backgroundView = view; }}
+                />
+                <Animatable.View
+                    animation='slideInUpCustom'
+                    duration={300}
+                    useNativeDriver
+                    style={containerStyle}
+                    ref={(view) => { this.contentView = view; }}
+                >
                     <View style={mainContainerStyle}>
                         <Animatable.View
-                            // animation='fadeInUp'
                             animation='bounceIn'
                             delay={400}
+                            useNativeDriver
                             style={headerStyle}
                         >
                             <Image source={require('../images/sunglasses-black.png')} />
@@ -111,6 +155,7 @@ class About extends Component {
                     <Animatable.View
                         animation='fadeIn'
                         delay={1000}
+                        useNativeDriver
                         style={footerContainerStyle}
                     >
                         <View style={rateShareContainer}>
@@ -132,10 +177,11 @@ class About extends Component {
                     <Animatable.View
                         animation='bounceIn'
                         delay={1500}
+                        useNativeDriver
                         style={backButtonStyle}
                     >
                         <TouchableOpacity
-                            onPress={onBackPress}
+                            onPress={onBackPressAction}
                         >
                             <Image
                                 style={backButtonImageStyle}
@@ -143,23 +189,34 @@ class About extends Component {
                             />
                         </TouchableOpacity>
                     </Animatable.View>
-                </View>
+                </Animatable.View>
             </Modal>
         );
     }
 }
 
 const styles = {
+    backgroundStyle: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width,
+        height,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+    },
     containerStyle: {
         flex: 1,
-        position: 'relative',
         justifyContent: 'center',
+        margin: 20,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
         backgroundColor: 'white',
-        alignItems: 'center'
+        alignItems: 'center',
+
     },
     mainContainerStyle: {
         flex: 1,
