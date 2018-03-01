@@ -28,15 +28,26 @@ export const podcastsListFetch = () => {
 const success = (dispatch, data) => {
     xml2js.parseString(data, (error, result) => {
         const podcasts = result.rss.channel[0].item.map((item) => {
-            const idx = item.title[0].indexOf('"');
+            let idx = item.title[0].indexOf('"');
+            if (idx === -1) {
+                idx = item.title[0].indexOf('-');
+                if (idx !== -1) idx += 1;
+            }
+            if (idx === -1) {
+                idx = item.title[0].indexOf('«');
+                if (idx !== -1) idx += 1;
+            }
+
             const title = item.title[0]
                             .substring(idx)
                             .replace(new RegExp('[- ]+$'), '')
-                            .replace(new RegExp('["]', 'g'), '')
+                            .replace(new RegExp('["«»]', 'g'), '')
+                            .trim()
                             .toUpperCase();
             const author = item.title[0]
                             .substring(0, idx)
                             .replace(new RegExp('[- ]+$'), '')
+                            .replace(new RegExp('["«»]', 'g'), '')
                             .toUpperCase();
 
             let description = item['itunes:summary'] ? item['itunes:summary'][0] : '';
