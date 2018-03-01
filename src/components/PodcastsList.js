@@ -12,10 +12,6 @@ class PodcastsList extends Component {
         this.props.podcastsListFetch();
     }
 
-    componentWillUpdate() {
-        LayoutAnimation.easeInEaseOut();
-    }
-
     renderItem({ item }) {
         const isDone = this.props.completed.indexOf(item.id) !== -1;
 
@@ -47,15 +43,6 @@ class PodcastsList extends Component {
         } = this.props;
         const { containerStyle } = styles;
 
-        if (!loaded) {
-            return (
-                <View style={containerStyle}>
-                    <Spinner />
-                    {this.renderAbout()}
-                </View>
-            );
-        }
-
         return (
             <View style={containerStyle}>
                 <FlatList
@@ -66,6 +53,7 @@ class PodcastsList extends Component {
                     keyExtractor={(item) => item.id}
                 />
                 {this.renderAbout()}
+                <Spinner visible={!loaded} />
             </View>
         );
     }
