@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, FlatList, LayoutAnimation } from 'react-native';
+import { View, FlatList } from 'react-native';
+import * as Animatable from 'react-native-animatable';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { podcastsListFetch } from '../actions';
@@ -10,6 +11,14 @@ import About from './About';
 class PodcastsList extends Component {
     componentDidMount() {
         this.props.podcastsListFetch();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { loaded } = nextProps;
+
+        if (loaded) {
+            this.containerView.fadeIn(300);
+        }
     }
 
     renderItem({ item }) {
@@ -45,13 +54,19 @@ class PodcastsList extends Component {
 
         return (
             <View style={containerStyle}>
-                <FlatList
+                <Animatable.View
+                    useNativeDriver
                     style={containerStyle}
-                    data={podcasts}
-                    extraData={completed}
-                    renderItem={this.renderItem.bind(this)}
-                    keyExtractor={(item) => item.id}
-                />
+                    ref={(view) => { this.containerView = view; }}
+                >
+                    <FlatList
+                        style={containerStyle}
+                        data={podcasts}
+                        extraData={completed}
+                        renderItem={this.renderItem.bind(this)}
+                        keyExtractor={(item) => item.id}
+                    />
+                </Animatable.View>
                 {this.renderAbout()}
                 <Spinner visible={!loaded} />
             </View>
