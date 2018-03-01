@@ -65,7 +65,7 @@ class Player extends Component {
     }
 
     updateCurrentTime(currentTime) {
-        // console.log(currentTime);
+        console.log(currentTime);
 
         let sliderValue = currentTime * 100.0;
         sliderValue /= AudioController.currentAudio.duration;
@@ -95,6 +95,7 @@ class Player extends Component {
             <Animatable.View
                 animation='fadeIn'
                 delay={400}
+                useNativeDriver
                 style={playerContainerStyle}
             >
                 <Slider
@@ -146,6 +147,7 @@ class Player extends Component {
                 <Animatable.View
                     animation='fadeIn'
                     delay={200}
+                    useNativeDriver
                     style={topContainerStyle}
                 >
                     <Text style={titleStyle}>{title}</Text>
@@ -155,6 +157,7 @@ class Player extends Component {
                 <Animatable.View
                     animation='fadeIn'
                     delay={300}
+                    useNativeDriver
                     style={middleContainerStyle}
                 >
                     <Text style={descriptionStyle}>{description}</Text>
@@ -165,6 +168,7 @@ class Player extends Component {
                 <Animatable.View
                     animation='fadeIn'
                     delay={500}
+                    useNativeDriver
                     style={footerContainerStyle}
                 >
                     <Text style={footerTextStyle}>{releaseDateText}</Text>
@@ -186,7 +190,8 @@ const playerStyles = {
     },
     buttonStyle: {
         width: 85,
-        height: 85
+        height: 85,
+        marginTop: 10
     }
 };
 
