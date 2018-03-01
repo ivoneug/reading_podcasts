@@ -32,7 +32,7 @@ class RouterComponent extends Component {
                         titleText='Reading'
 
                         rightTitle='About'
-                        rightButtonTextStyle={{ color: 'black' }}
+                        rightButtonTextStyle={{ color: 'black', paddingLeft: 5 }}
                         onRight={() => Actions.refresh({ showAbout: true })}
 
                         key='list'
