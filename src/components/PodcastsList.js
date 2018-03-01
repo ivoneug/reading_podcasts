@@ -16,7 +16,7 @@ class PodcastsList extends Component {
     componentWillReceiveProps(nextProps) {
         const { loaded } = nextProps;
 
-        if (loaded) {
+        if (loaded && loaded !== this.props.loaded) {
             this.containerView.fadeIn(300);
         }
     }
@@ -50,17 +50,21 @@ class PodcastsList extends Component {
             podcasts,
             completed
         } = this.props;
-        const { containerStyle } = styles;
+        const {
+            containerStyle,
+            listContainerStyle,
+            listStyle
+        } = styles;
 
         return (
             <View style={containerStyle}>
                 <Animatable.View
                     useNativeDriver
-                    style={containerStyle}
+                    style={listContainerStyle}
                     ref={(view) => { this.containerView = view; }}
                 >
                     <FlatList
-                        style={containerStyle}
+                        style={listStyle}
                         data={podcasts}
                         extraData={completed}
                         renderItem={this.renderItem.bind(this)}
@@ -80,6 +84,14 @@ class PodcastsList extends Component {
 const styles = {
     containerStyle: {
         flex: 1
+    },
+    listContainerStyle: {
+        flex: 1,
+        opacity: 0
+    },
+    listStyle: {
+        flex: 1,
+        backgroundColor: '#C9E3FF'
     },
     spinnerStyle: {
         flex: 1

@@ -70,7 +70,8 @@ const styles = {
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1,
-        borderColor: '#ddd'
+        borderColor: '#ddd',
+        backgroundColor: 'white'
     },
     isDoneStyle: {
         backgroundColor: '#C9E3FF'
