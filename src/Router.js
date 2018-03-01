@@ -5,6 +5,7 @@ import {
     Actions
 } from 'react-native-router-flux';
 import SplashScreen from 'react-native-splash-screen';
+import LocalizedStrings from 'react-native-localization';
 import NavigationTitle from './components/common/NavigationTitle';
 import PodcastsList from './components/PodcastsList';
 import Player from './components/Player';
@@ -25,13 +26,14 @@ class RouterComponent extends Component {
                     key='root'
                     activeBackgroundColor='black'
                     inactiveBackgroundColor='white'
+                    navigationBarStyle={{ backgroundColor: '#C9E3FF' }}
                 >
                     <Scene
                         initial
                         renderTitle={NavigationTitle}
-                        titleText='Reading'
+                        titleText={strings.title}
 
-                        rightTitle='About'
+                        rightTitle={strings.about}
                         rightButtonTextStyle={{ color: 'black', paddingLeft: 5 }}
                         onRight={() => Actions.refresh({ showAbout: true })}
 
@@ -39,10 +41,10 @@ class RouterComponent extends Component {
                         component={PodcastsList}
                     />
                     <Scene
-                        title='Now Listening'
+                        title={strings.listeningTitle}
                         titleStyle={{ color: 'black', alignSelf: 'center' }}
 
-                        backTitle='Back'
+                        backTitle={strings.back}
                         backButtonTextStyle={{ color: 'black' }}
                         backButtonTintColor='black'
 
@@ -58,5 +60,20 @@ class RouterComponent extends Component {
         );
     }
 }
+
+const strings = new LocalizedStrings({
+    en: {
+        title: 'Reading',
+        about: 'About',
+        listeningTitle: 'Now Listening',
+        back: 'Back'
+    },
+    ru: {
+        title: 'Чтение',
+        about: 'О нас',
+        listeningTitle: 'Аудиоплеер',
+        back: 'Назад'
+    }
+});
 
 export default RouterComponent;

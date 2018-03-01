@@ -9,6 +9,7 @@ import {
     Dimensions
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import LocalizedStrings from 'react-native-localization';
 import { openAppPageInStore } from '../AppStoreInteraction';
 
 const Links = {
@@ -98,11 +99,11 @@ class About extends Component {
                             style={headerStyle}
                         >
                             <Image source={require('../images/sunglasses-black.png')} />
-                            <Text style={headerTextStyle}>Reading</Text>
+                            <Text style={headerTextStyle}>{strings.title}</Text>
                         </Animatable.View>
                         <Animatable.View animation='fadeIn' delay={900}>
                             <View style={developerContainerStyle}>
-                                <Text style={normalTextStyle}>developed by Evgeniy Ivon</Text>
+                                <Text style={normalTextStyle}>{strings.developer}</Text>
                                 <View style={socialButtonsContainer}>
                                     <TouchableOpacity
                                         onPress={() => {
@@ -138,7 +139,7 @@ class About extends Component {
                                 </View>
                             </View>
                             <View style={testerContainerStyle}>
-                                <Text style={normalTextStyle}>tested by Viktor Savelev</Text>
+                                <Text style={normalTextStyle}>{strings.tester}</Text>
                                 <View style={socialButtonsContainer}>
                                     <TouchableOpacity
                                         onPress={() => {
@@ -165,14 +166,14 @@ class About extends Component {
                                 }}
                             >
                                 <View style={rateShareButtonStyle}>
-                                    <Text style={normalTextStyle}>Rate this app</Text>
+                                    <Text style={normalTextStyle}>{strings.rate}</Text>
                                     <Image style={rateShareIconStyle} source={require('../images/star.png')} />
                                 </View>
                             </TouchableOpacity>
                         </View>
-                        <Text style={normalTextStyle}>data provided by radiomayak.ru</Text>
-                        <Text style={normalTextStyle}>Main icon made by Yannick</Text>
-                        <Text style={normalTextStyle}>from www.flaticon.com</Text>
+                        <Text style={normalTextStyle}>{strings.dataProvider}</Text>
+                        <Text style={normalTextStyle}>{strings.iconProvider}</Text>
+                        <Text style={normalTextStyle}>{strings.iconProviderSite}</Text>
                     </Animatable.View>
                     <Animatable.View
                         animation='bounceIn'
@@ -205,6 +206,7 @@ const styles = {
         width,
         height,
         backgroundColor: 'rgba(0, 0, 0, 0.75)'
+        // backgroundColor: 'rgba(201, 227, 255, 0.75)'
     },
     containerStyle: {
         flex: 1,
@@ -281,5 +283,26 @@ const styles = {
         height: 35
     }
 };
+
+const strings = new LocalizedStrings({
+    en: {
+        title: 'Reading',
+        developer: 'developed by Evgeniy Ivon',
+        tester: 'tested by Viktor Savelev',
+        rate: 'Rate this app',
+        dataProvider: 'data provided by radiomayak.ru',
+        iconProvider: 'main icon made by Yannick',
+        iconProviderSite: 'from www.flaticon.com'
+    },
+    ru: {
+        title: 'Чтение',
+        developer: 'разработчик Евгений Ивон',
+        tester: 'тестирование Виктор Савельев',
+        rate: 'Оценить приложение',
+        dataProvider: 'данные предоставлены radiomayak.ru',
+        iconProvider: 'автор иконки приложения Yannick',
+        iconProviderSite: 'www.flaticon.com'
+    }
+});
 
 export default About;

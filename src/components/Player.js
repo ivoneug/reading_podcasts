@@ -3,6 +3,7 @@ import { View, Text, Image, Slider, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { AudioController } from 'react-native-hue-player';
 import * as Animatable from 'react-native-animatable';
+import LocalizedStrings from 'react-native-localization';
 import { podcastPlayCompleted } from '../actions';
 
 class Player extends Component {
@@ -140,8 +141,8 @@ class Player extends Component {
             footerContainerStyle
         } = styles;
 
-        const durationText = `duration: ${duration}`;
-        const releaseDateText = `release date: ${(new Date(date)).toLocaleDateString()}`;
+        const durationText = `${strings.duration}: ${duration}`;
+        const releaseDateText = `${strings.releaseDate}: ${(new Date(date)).toLocaleDateString()}`;
 
         return (
             <View style={containerStyle}>
@@ -237,5 +238,18 @@ const styles = {
         marginTop: 5
     }
 };
+
+const strings = new LocalizedStrings({
+    en: {
+        duration: 'duration',
+        releaseDate: 'release date',
+        completed: 'COMPLETED'
+    },
+    ru: {
+        duration: 'продолжительность',
+        releaseDate: 'дата выхода',
+        completed: 'ПРОСЛУШАНО'
+    }
+});
 
 export default connect(null, { podcastPlayCompleted })(Player);

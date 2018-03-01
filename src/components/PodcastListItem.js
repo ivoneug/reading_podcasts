@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import LocalizedStrings from 'react-native-localization';
 
 class PodcastListItem extends Component {
     render() {
@@ -21,8 +22,8 @@ class PodcastListItem extends Component {
             doneTextStyle
         } = styles;
 
-        const durationText = `duration: ${duration}`;
-        const releaseDateText = `release date: ${(new Date(date)).toLocaleDateString()}`;
+        const durationText = `${strings.duration}: ${duration}`;
+        const releaseDateText = `${strings.releaseDate}: ${(new Date(date)).toLocaleDateString()}`;
 
         const containerStyles = [containerStyle];
         if (this.props.isDone) {
@@ -33,7 +34,7 @@ class PodcastListItem extends Component {
             if (this.props.isDone) {
                 return (
                     <View style={footerContainer}>
-                        <Text style={doneTextStyle}>COMPLETED</Text>
+                        <Text style={doneTextStyle}>{strings.completed}</Text>
                     </View>
                 );
             }
@@ -102,5 +103,18 @@ const styles = {
         margin: 15
     }
 };
+
+const strings = new LocalizedStrings({
+    en: {
+        duration: 'duration',
+        releaseDate: 'release date',
+        completed: 'COMPLETED'
+    },
+    ru: {
+        duration: 'продолжительность',
+        releaseDate: 'дата выхода',
+        completed: 'ПРОСЛУШАНО'
+    }
+});
 
 export default PodcastListItem;
