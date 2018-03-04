@@ -5,3 +5,4 @@ export * from './Header';
 export * from './Input';
 export { default as Spinner } from './Spinner';
 export * from './ConfirmDialog';
+export { default as Alert } from './Alert';

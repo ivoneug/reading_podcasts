@@ -3,15 +3,24 @@ import {
     PODCASTS_FETCH_FAILED
 } from '../actions/types';
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = {
+    list: [],
+    failed: false
+};
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case PODCASTS_FETCH_SUCCESS:
-            return action.payload;
+            return {
+                list: action.payload,
+                failed: false
+            };
 
         case PODCASTS_FETCH_FAILED:
-            return INITIAL_STATE;
+            return {
+                list: [],
+                failed: true
+            };
 
         default:
             return state;

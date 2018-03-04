@@ -3,8 +3,9 @@ import { View, FlatList } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import LocalizedStrings from 'react-native-localization';
 import { podcastsListFetch } from '../actions';
-import { Spinner } from './common';
+import { Spinner, Alert } from './common';
 import PodcastListItem from './PodcastListItem';
 import About from './About';
 
@@ -47,6 +48,7 @@ class PodcastsList extends Component {
     render() {
         const {
             loaded,
+            failed,
             podcasts,
             completed
         } = this.props;
@@ -76,6 +78,15 @@ class PodcastsList extends Component {
                     visible={!loaded}
                     color='#C9E3FF'
                 />
+                <Alert
+                    visible={failed}
+                    title={strings.alertTitle}
+                    description={strings.alertDescription}
+                    buttonText={strings.alertButton}
+                    onConfirm={() => {
+                        this.props.podcastsListFetch();
+                    }}
+                />
             </View>
         );
     }
@@ -98,10 +109,24 @@ const styles = {
     }
 };
 
+const strings = new LocalizedStrings({
+    en: {
+        alertTitle: 'Unable to load data',
+        alertDescription: 'Looks like there is no internet connection at this time.',
+        alertButton: 'Try Again'
+    },
+    ru: {
+        alertTitle: 'Не могу загрузить данные',
+        alertDescription: 'Похоже, что отсутствует соединение с интернетом',
+        alertButton: 'Попробовать еще'
+    }
+});
+
 const mapStateToProps = (state) => {
     return {
-        loaded: state.podcasts.length > 0,
-        podcasts: state.podcasts,
+        loaded: state.podcasts.list.length > 0,
+        podcasts: state.podcasts.list,
+        failed: state.podcasts.failed,
         completed: state.completed
     };
 };
