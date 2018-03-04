@@ -3,10 +3,8 @@ package ru.bibobo.reading_podcasts;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.futurice.rctaudiotoolkit.AudioPackage;
 import com.babisoft.ReactNativeLocalization.ReactNativeLocalizationPackage;
-import com.tanguyantoine.react.MusicControl;
-import com.zmxv.RNSound.RNSoundPackage;
-import fm.indiecast.rnaudiostreamer.RNAudioStreamerPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -28,10 +26,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AudioPackage(),
             new ReactNativeLocalizationPackage(),
-            new MusicControl(),
-            new RNSoundPackage(),
-            new RNAudioStreamerPackage(),
             new SplashScreenReactPackage()
       );
     }

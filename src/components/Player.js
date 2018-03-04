@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, Image, Slider, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { AudioController } from 'react-native-hue-player';
+import {
+    Player as ToolkitPlayer,
+    MediaStates
+} from 'react-native-audio-toolkit';
 import * as Animatable from 'react-native-animatable';
 import LocalizedStrings from 'react-native-localization';
 import { podcastPlayCompleted } from '../actions';
@@ -9,47 +12,48 @@ import { podcastPlayCompleted } from '../actions';
 class Player extends Component {
     state = { showPlayButton: false };
 
-    componentWillMount() {
-        const audio = {
-            key: this.props.item.id,
-            title: this.props.item.title,
-            url: this.props.item.url
-        };
-        AudioController.init(
-            [audio], 0,
-            this.onChangeStatus.bind(this),
-            this.updateCurrentTime.bind(this));
-    }
-
     componentDidMount() {
-        AudioController.play();
+        this.update = this.update.bind(this);
+
+        this.interval = setInterval(this.update, 1000);
+
+        this.player = new ToolkitPlayer(this.props.item.url, {
+            autoDestroy: false,
+            continuesToPlayInBackground: true
+        }).play();
     }
 
     componentWillUnmount() {
-        AudioController.pause();
+        clearInterval(this.interval);
+        this.player.destroy();
     }
 
-    onChangeStatus(status) {
-        switch (status) {
-            case AudioController.status.PLAYING:
+    onChangeStatus(state) {
+        switch (state) {
+            case MediaStates.PLAYING:
                 this.setState({ showPlayButton: false });
                 break;
 
-            case AudioController.status.PAUSED:
-            case AudioController.status.STOPPED:
+            case MediaStates.PAUSED:
+            case MediaStates.DESTROYED:
                 this.setState({ showPlayButton: true });
                 break;
 
             default:
-
         }
     }
 
     onPlayerButtonPress() {
         if (this.state.showPlayButton) {
-            AudioController.play();
-        } else {
-            AudioController.pause();
+            if (this.player.canPlay) {
+                this.player.play(this.onChangeStatus(MediaStates.PLAYING));
+            }
+
+            return;
+        }
+
+        if (this.player.canStop) {
+            this.player.pause(this.onChangeStatus(MediaStates.PAUSED));
         }
     }
 
@@ -58,18 +62,28 @@ class Player extends Component {
     }
 
     onPlayerValueChangeComplete(value) {
-        let currentTime = value / 100.0;
-        currentTime *= AudioController.currentAudio.duration;
+        if (!this.player.canPlay) {
+            return;
+        }
 
-        AudioController.seek(currentTime);
+        let currentTime = value / 100.0;
+        currentTime *= this.player.duration;
+
+        // TrackPlayer.seekTo(currentTime);
+        this.player.seek(currentTime);
         this.shouldNotUpdateSlider = false;
     }
 
-    updateCurrentTime(currentTime) {
-        console.log(currentTime);
+    update() {
+        if (!this.player.canPlay) {
+            return;
+        }
+        if (this.player.isStopped) {
+            this.onChangeStatus(MediaStates.PAUSED);
+        }
 
-        let sliderValue = currentTime * 100.0;
-        sliderValue /= AudioController.currentAudio.duration;
+        let sliderValue = this.player.currentTime * 100.0;
+        sliderValue /= this.player.duration;
 
         if (this.slider && !this.shouldNotUpdateSlider) {
             this.slider.setNativeProps({ value: sliderValue });
