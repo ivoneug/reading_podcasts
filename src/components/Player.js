@@ -7,10 +7,14 @@ import {
 } from 'react-native-audio-toolkit';
 import * as Animatable from 'react-native-animatable';
 import LocalizedStrings from 'react-native-localization';
+import { Spinner } from './common';
 import { podcastPlayCompleted } from '../actions';
 
 class Player extends Component {
-    state = { showPlayButton: false };
+    state = {
+        showPlayButton: false,
+        isPlayerReady: false
+    };
 
     componentDidMount() {
         this.update = this.update.bind(this);
@@ -29,6 +33,11 @@ class Player extends Component {
     }
 
     onChangeStatus(state) {
+        if (this.player.state === MediaStates.ERROR
+            || this.player.duration === 0) {
+            return;
+        }
+
         switch (state) {
             case MediaStates.PLAYING:
                 this.setState({ showPlayButton: false });
@@ -44,6 +53,11 @@ class Player extends Component {
     }
 
     onPlayerButtonPress() {
+        if (this.player.state === MediaStates.ERROR
+            || this.player.duration === 0) {
+            return;
+        }
+
         if (this.state.showPlayButton) {
             if (this.player.canPlay) {
                 this.player.play(this.onChangeStatus(MediaStates.PLAYING));
@@ -80,6 +94,13 @@ class Player extends Component {
         }
         if (this.player.isStopped) {
             this.onChangeStatus(MediaStates.PAUSED);
+
+            // mark podcast as completed
+            this.props.podcastPlayCompleted(this.props.item.id);
+        }
+        if (!this.state.isPlayerReady
+            && this.player && this.player.duration > 0) {
+            this.setState({ isPlayerReady: true });
         }
 
         let sliderValue = this.player.currentTime * 100.0;
@@ -132,6 +153,12 @@ class Player extends Component {
                         source={buttonImage}
                     />
                 </TouchableOpacity>
+                <Spinner
+                    backgroundColor='white'
+                    color='#C9E3FF'
+                    fadeInAnimation={false}
+                    visible={!this.state.isPlayerReady}
+                />
             </Animatable.View>
         );
     }
