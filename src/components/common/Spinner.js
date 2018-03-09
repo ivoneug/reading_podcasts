@@ -17,14 +17,24 @@ class Spinner extends Component {
 
     render() {
         const { visible } = this.state;
-        const { size, color } = this.props;
+        const {
+            size,
+            color,
+            backgroundColor,
+            fadeInAnimation
+        } = this.props;
         const { spinnerStyle, hideStyle } = styles;
 
-        const style = visible ? spinnerStyle : [spinnerStyle, hideStyle];
+        const style = visible ? [spinnerStyle] : [spinnerStyle, hideStyle];
+        if (backgroundColor) {
+            style.push({ backgroundColor });
+        }
+
+        const animation = fadeInAnimation == null || fadeInAnimation ? 'fadeIn' : '';
 
         return (
             <Animatable.View
-                animation='fadeIn'
+                animation={animation}
                 useNativeDriver
                 style={style}
                 ref={(view) => { this.view = view; }}
