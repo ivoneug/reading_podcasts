@@ -43,7 +43,11 @@ class RouterComponent extends Component {
                     />
                     <Scene
                         title={strings.listeningTitle}
-                        titleStyle={{ color: 'black', alignSelf: 'center' }}
+                        titleStyle={{
+                            color: 'black',
+                            alignSelf: 'center',
+                            fontWeight: '400'
+                        }}
 
                         backTitle={strings.back}
                         backButtonTextStyle={{ color: 'black' }}
