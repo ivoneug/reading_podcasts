@@ -65,8 +65,8 @@ class About extends Component {
         visible = visible || false;
 
         const onBackPressAction = () => {
-            this.backgroundView.fadeOut(300);
             this.contentView.slideOutDownCustom(300)
+                .then(() => this.backgroundView.fadeOut(300))
                 .then(onBackPress);
         };
 
