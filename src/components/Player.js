@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, Slider, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import {
     Player as ToolkitPlayer,
     MediaStates
@@ -8,7 +9,7 @@ import {
 import * as Animatable from 'react-native-animatable';
 import LocalizedStrings from 'react-native-localization';
 import { Spinner } from './common';
-import { podcastPlayCompleted } from '../actions';
+import { podcastPlayCompleted, podcastPlayUncompleted } from '../actions';
 
 class Player extends Component {
     state = {
@@ -25,6 +26,17 @@ class Player extends Component {
             autoDestroy: false,
             continuesToPlayInBackground: true
         }).play();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { isDone, rightButtonPressed } = nextProps;
+        if (!rightButtonPressed) return;
+
+        if (isDone) {
+            this.clearCompleted();
+        } else {
+            this.markAsCompleted();
+        }
     }
 
     componentWillUnmount() {
@@ -83,20 +95,31 @@ class Player extends Component {
         let currentTime = value / 100.0;
         currentTime *= this.player.duration;
 
-        // TrackPlayer.seekTo(currentTime);
         this.player.seek(currentTime);
         this.shouldNotUpdateSlider = false;
+    }
+
+    markAsCompleted() {
+        // mark podcast as completed
+        this.props.podcastPlayCompleted(this.props.item.id);
+
+        Actions.refresh({ isDone: true, rightButtonPressed: false });
+    }
+
+    clearCompleted() {
+        // clear podcast completeion mark
+        this.props.podcastPlayUncompleted(this.props.item.id);
+
+        Actions.refresh({ isDone: false, rightButtonPressed: false });
     }
 
     update() {
         if (!this.player.canPlay) {
             return;
         }
-        if (this.player.isStopped) {
+        if (this.player.isStopped && !this.state.showPlayButton) {
             this.onChangeStatus(MediaStates.PAUSED);
-
-            // mark podcast as completed
-            this.props.podcastPlayCompleted(this.props.item.id);
+            this.markAsCompleted();
         }
         if (!this.state.isPlayerReady
             && this.player && this.player.duration > 0) {
@@ -108,11 +131,6 @@ class Player extends Component {
 
         if (this.slider && !this.shouldNotUpdateSlider) {
             this.slider.setNativeProps({ value: sliderValue });
-        }
-
-        if (sliderValue > 95) {
-            // mark podcast as completed
-            this.props.podcastPlayCompleted(this.props.item.id);
         }
     }
 
@@ -293,4 +311,6 @@ const strings = new LocalizedStrings({
     }
 });
 
-export default connect(null, { podcastPlayCompleted })(Player);
+export default connect(null, {
+    podcastPlayCompleted, podcastPlayUncompleted
+})(Player);

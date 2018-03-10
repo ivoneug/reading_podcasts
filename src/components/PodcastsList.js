@@ -29,7 +29,7 @@ class PodcastsList extends Component {
             <PodcastListItem
                 item={item}
                 isDone={isDone}
-                onItemPress={() => Actions.player({ item })}
+                onItemPress={() => Actions.player({ item, isDone })}
             />
         );
     }
