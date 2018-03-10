@@ -7,6 +7,7 @@ import {
 import SplashScreen from 'react-native-splash-screen';
 import LocalizedStrings from 'react-native-localization';
 import NavigationTitle from './components/common/NavigationTitle';
+import RightCheckNavigationButton from './components/common/RightCheckNavigationButton';
 import PodcastsList from './components/PodcastsList';
 import Player from './components/Player';
 
@@ -48,9 +49,8 @@ class RouterComponent extends Component {
                         backButtonTextStyle={{ color: 'black' }}
                         backButtonTintColor='black'
 
-                        rightTitle=' '
-                        rightButtonTextStyle={{ color: 'black', paddingLeft: 5 }}
-                        onRight={() => {}}
+                        renderRightButton={RightCheckNavigationButton}
+                        onRight={() => Actions.refresh({ rightButtonPressed: true })}
 
                         key='player'
                         component={Player}
