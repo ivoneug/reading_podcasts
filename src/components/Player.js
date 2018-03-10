@@ -137,6 +137,7 @@ class Player extends Component {
     renderPlayer() {
         const {
             playerContainerStyle,
+            playerInnerContainerStyle,
             seekbarStyle,
             buttonStyle
         } = playerStyles;
@@ -145,6 +146,11 @@ class Player extends Component {
         const pauseImage = require('../images/pause.png');
         const buttonImage = this.state.showPlayButton ? playImage : pauseImage;
 
+        const containerStyle = [playerInnerContainerStyle];
+        if (!this.state.isPlayerReady) {
+            containerStyle.push({ opacity: 0 });
+        }
+
         return (
             <Animatable.View
                 animation='fadeIn'
@@ -152,29 +158,31 @@ class Player extends Component {
                 useNativeDriver
                 style={playerContainerStyle}
             >
-                <Slider
-                    ref={slider => { this.slider = slider; }}
-                    style={seekbarStyle}
-                    step={1}
-                    minimumValue={0}
-                    maximumValue={100}
-                    minimumTrackTintColor='#C9E3FF'
-                    thumbTintColor='#C9E3FF'
-                    onValueChange={this.onPlayerValueChange.bind(this)}
-                    onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
-                />
-                <TouchableOpacity
-                    onPress={this.onPlayerButtonPress.bind(this)}
-                >
-                    <Image
-                        style={buttonStyle}
-                        source={buttonImage}
+                <View style={containerStyle}>
+                    <Slider
+                        ref={slider => { this.slider = slider; }}
+                        style={seekbarStyle}
+                        step={1}
+                        minimumValue={0}
+                        maximumValue={100}
+                        minimumTrackTintColor='#C9E3FF'
+                        thumbTintColor='#C9E3FF'
+                        onValueChange={this.onPlayerValueChange.bind(this)}
+                        onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
                     />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={this.onPlayerButtonPress.bind(this)}
+                    >
+                        <Image
+                            style={buttonStyle}
+                            source={buttonImage}
+                        />
+                    </TouchableOpacity>
+                </View>
+
                 <Spinner
                     backgroundColor='white'
                     color='#C9E3FF'
-                    fadeInAnimation={false}
                     visible={!this.state.isPlayerReady}
                 />
             </Animatable.View>
@@ -243,10 +251,13 @@ class Player extends Component {
 const playerStyles = {
     playerContainerStyle: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         marginTop: 20,
         marginBottom: 20
+    },
+    playerInnerContainerStyle: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     seekbarStyle: {
         width: 300
