@@ -74,7 +74,8 @@ const styles = {
         backgroundColor: 'white'
     },
     isDoneStyle: {
-        backgroundColor: '#C9E3FF'
+        backgroundColor: '#C9E3FF',
+        borderColor: 'rgba(143, 165, 191, 0.5)'
     },
     textContainer: {
         flex: 1,
