@@ -242,9 +242,11 @@ class Player extends Component {
 
 const playerStyles = {
     playerContainerStyle: {
-        flex: 1.5,
+        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 20,
+        marginBottom: 20
     },
     seekbarStyle: {
         width: 300
@@ -289,7 +291,7 @@ const styles = {
         marginTop: 5
     },
     descriptionStyle: {
-        fontSize: 14,
+        fontSize: 12,
         textAlign: 'left'
     },
     footerTextStyle: {
