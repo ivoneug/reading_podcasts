@@ -261,7 +261,7 @@ const playerStyles = {
         justifyContent: 'center'
     },
     seekbarStyle: {
-        width: 300
+        width: 280
     },
     buttonStyle: {
         width: 85,
