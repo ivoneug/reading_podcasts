@@ -167,6 +167,7 @@ class Player extends Component {
                         maximumValue={100}
                         minimumTrackTintColor='#C9E3FF'
                         thumbTintColor='#C9E3FF'
+                        thumbImage={require('../images/slider-thumb.png')}
                         onValueChange={this.onPlayerValueChange.bind(this)}
                         onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
                     />
