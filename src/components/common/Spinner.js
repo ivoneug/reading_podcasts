@@ -8,7 +8,8 @@ class Spinner extends Component {
     componentWillReceiveProps(nextProps) {
         const { visible = true } = nextProps;
 
-        if (!visible) {
+        if (this.props.visible !== visible
+            && !visible) {
             this.view.fadeOut(300).then(() => {
                 this.setState({ visible: false });
             });
