@@ -53,14 +53,21 @@ const success = (dispatch, data) => {
             let description = item['itunes:summary'] ? item['itunes:summary'][0] : '';
             description = description.replace(new RegExp('(?:\r\n|\r|\n)', 'g'), ' ');
 
+            const extractUrl = (url) => {
+                return url.match(/http(s|).*?((?=http)|$)/g)[0];
+            };
+
+            const id = extractUrl(item.guid[0]._);
+            const url = extractUrl(item.enclosure[0].$.url);
+
             const entry = {
-                id: item.guid[0]._,
+                id,
                 title,
                 author,
                 description,
                 duration: item['itunes:duration'][0],
                 date: item.pubDate[0],
-                url: item.enclosure[0].$.url,
+                url,
                 length: item.enclosure[0].$.length
             };
 
