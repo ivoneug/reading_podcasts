@@ -99,6 +99,27 @@ class Player extends Component {
         this.shouldNotUpdateSlider = false;
     }
 
+    playerSeekShift(valueInSec) {
+        if (!this.player.canPlay) {
+            return;
+        }
+
+        const value = valueInSec * 1000.0;
+        const currentTime = this.player.currentTime;
+        const duration = this.player.duration;
+
+        let seekValue = currentTime + value;
+        if (seekValue > duration) {
+            seekValue = duration - 1000.0;
+        }
+        if (seekValue < 0) {
+            seekValue = 0;
+        }
+
+        this.player.seek(seekValue);
+        this.updateSliderValue(seekValue, true);
+    }
+
     markAsCompleted() {
         // mark podcast as completed
         this.props.podcastPlayCompleted(this.props.item.id);
@@ -126,7 +147,15 @@ class Player extends Component {
             this.setState({ isPlayerReady: true });
         }
 
-        let sliderValue = this.player.currentTime * 100.0;
+        this.updateSliderValue(this.player.currentTime);
+    }
+
+    updateSliderValue(currentTime, force) {
+        if (force) {
+            this.shouldNotUpdateSlider = false;
+        }
+
+        let sliderValue = currentTime * 100.0;
         sliderValue /= this.player.duration;
 
         if (this.slider && !this.shouldNotUpdateSlider) {
@@ -139,7 +168,12 @@ class Player extends Component {
             playerContainerStyle,
             playerInnerContainerStyle,
             seekbarStyle,
-            buttonStyle
+            buttonsContainerStyle,
+            buttonStyle,
+            secondaryButtonStyle,
+            secondaryTextStyle,
+            secondaryLeftContainerStyle,
+            secondaryRightContainerStyle
         } = playerStyles;
 
         const playImage = require('../images/play.png');
@@ -171,14 +205,43 @@ class Player extends Component {
                         onValueChange={this.onPlayerValueChange.bind(this)}
                         onSlidingComplete={this.onPlayerValueChangeComplete.bind(this)}
                     />
-                    <TouchableOpacity
-                        onPress={this.onPlayerButtonPress.bind(this)}
-                    >
-                        <Image
-                            style={buttonStyle}
-                            source={buttonImage}
-                        />
-                    </TouchableOpacity>
+                    <View style={buttonsContainerStyle}>
+                        <TouchableOpacity
+                            style={secondaryLeftContainerStyle}
+                            onPress={() => {
+                                this.playerSeekShift(-15);
+                            }}
+                        >
+                            <Image
+                                style={secondaryButtonStyle}
+                                source={require('../images/step-backward.png')}
+                            />
+                            <Text style={secondaryTextStyle}>{strings.back15Sec}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={this.onPlayerButtonPress.bind(this)}
+                        >
+                            <Image
+                                style={buttonStyle}
+                                source={buttonImage}
+                            />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={secondaryRightContainerStyle}
+                            onPress={() => {
+                                this.playerSeekShift(15);
+                            }}
+                        >
+                            <Image
+                                style={secondaryButtonStyle}
+                                source={require('../images/step-forward.png')}
+                            />
+                            <Text style={secondaryTextStyle}>{strings.forward15Sec}</Text>
+                        </TouchableOpacity>
+                    </View>
+
                 </View>
 
                 <Spinner
@@ -263,10 +326,35 @@ const playerStyles = {
     seekbarStyle: {
         width: 280
     },
+    buttonsContainerStyle: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10
+    },
     buttonStyle: {
         width: 85,
-        height: 85,
-        marginTop: 10
+        height: 85
+    },
+    secondaryLeftContainerStyle: {
+        marginTop: 10,
+        marginRight: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    secondaryRightContainerStyle: {
+        marginTop: 10,
+        marginLeft: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    secondaryTextStyle: {
+        fontSize: 10,
+        lineHeight: 10
+    },
+    secondaryButtonStyle: {
+        width: 40,
+        height: 40
     }
 };
 
@@ -316,12 +404,16 @@ const strings = new LocalizedStrings({
     en: {
         duration: 'duration',
         releaseDate: 'release date',
-        completed: 'COMPLETED'
+        completed: 'COMPLETED',
+        back15Sec: '-15 sec',
+        forward15Sec: '+15 sec'
     },
     ru: {
         duration: 'продолжительность',
         releaseDate: 'дата выхода',
-        completed: 'ПРОСЛУШАНО'
+        completed: 'ПРОСЛУШАНО',
+        back15Sec: '-15 сек',
+        forward15Sec: '+15 сек'
     }
 });
 
